@@ -212,56 +212,158 @@ app.listen(3333);
 - Acessar, baixar e instalar o Insomnia ([https://insomnia.rest](https://insomnia.rest/));
 - Instalar o Tema Dracula para o Insomnia ([https://draculatheme.com/insomnia/](https://draculatheme.com/insomnia/));
 - Criar um novo `Workspace`;
+
 <p align="center">
   <img src="../readme/create-workspace.png" width="641" height="527">
 </p>
+
 - Criar um `Folder` para cada tipo de recurso, inicialmente criar um para `Projects`;
+
 <p align="center">
   <img src="../readme/create-folder.png" width="641" height="527">
 </p>
+
 - Criar uma `Request` dentro da Folder, clicando em `click to add first request...` , dar o nome de `List` e manter o método `GET`;
+
 <p align="center">
   <img src="../readme/create-request.png" width="641" height="527">
 </p>
+
 - Inserir na barra de endereço a URL da aplicação Node e dar um `Send`;
+
 <p align="center">
   <img src="../readme/send-request.png" width="641" height="527">
 </p>
+
 - O retorno deve ser igual ao retorno do browser;
 - Duplicar a rota criada anteriormente e mudar o método para `POST` e o nome para `Create`, feito isso dar um `Send` novamente;
+
 <p align="center">
   <img src="../readme/duplicate-request.png" width="641" height="527">
 </p>
+
 - Duplicar novamente a rota e mudar o método para `PUT` e o nome para `Update` , ao tentar enviar vai ocorrer um erro, pois essa rota espera um `id` como parâmetro, basta inserir ao final da URL da aplicação o seguinte: `/1` e dar um `Send`;
+
 <p align="center">
   <img src="../readme/put-request.png" width="641" height="527">
 </p>
+
 - Duplicar a rota `Update` , mudar apenas o método para `Delete` e dar um `Send` novamente;
 - Criar um novo `Environment`;
+
 <p align="center">
   <img src="../readme/create-environment.png" width="641" height="527">
 </p>
-    - Os `Environments` são usados para separar as rotas para testar a aplicação local e também online;
+
+  - Os `Environments` são usados para separar as rotas para testar a aplicação local e também online;
 - Criar um `Sub Environment` com nome `dev` ;
+
 <p align="center">
   <img src="../readme/create-sub-environment.png" width="641" height="527">
 </p>
-    - Pra renomear o `Sub Environment` criado basta dar 2 cliques sobre o nome;
-- Criar a variável `base_url` no `Sub Environment` criado, ficando assim:
 
+  - Pra renomear o `Sub Environment` criado basta dar 2 cliques sobre o nome;
+- Criar a variável `base_url` no `Sub Environment` criado, ficando assim:
+  ```json
+  {
+    "base_url": "http://localhost:3333"
+  }
+  ```
+- Clicar em `Done` para salvar o `Environment`;
+- Clicar no aviso `No Environment` e selecionar o `dev` criado anteriormente;
+
+<p align="center">
+  <img src="../readme/select-environment.png" width="641" height="527">
+</p>
+
+- Trocar nas rotas criadas a URL `http://localhost:3333` por `base_url`;
+
+<p align="center">
+  <img src="../readme/change-url.png" width="641" height="527">
+</p>
+
+  - Ao começar a digitar `base_url` o Insomnia irá sugerir a variável criada no `Environment`;
+
+# Tipos de Parâmetros
+
+## Tipos de Parâmetros
+
+- Query Params: Filtros e paginação;
+  - Passado através das URL:
+    ```
+    http://localhost:3333/projects?title=React&owner=Diego
+    ```
+  - No Insomnia há uma aba específica para isso:
+
+<p align="center">
+  <img src="../readme/query-params.png" width="641" height="527">
+</p>
+
+- Route Params: Identificar recursos (Atualizar/Deletar);
+  - Passado através da URL:
+    ```
+      http://localhost:3333/projects/1
+    ```
+    - Esse tipo de parâmetro já foi usado nas rotas com os métodos `PUT` e `DELETE` para passar o id;
+- Request Body:Conteúdo na hora de criar ou editar um recurso (JSON);
+  - No Insomnia há como inserir um corpo na requisição:
+  - Inserir no Body da requisição `Create` no Insomnia o seguinte conteúdo:
     ```json
     {
-      "base_url": "http://localhost:3333"
+      "title": "Aplicativo React Native",
+      "owner": "Diego Fernandes"
     }
     ```
 
-- Clicar em `Done` para salvar o `Environment`;
-- Clicar no aviso `No Environment` e selecionar o `dev` criado anteriormente;
-<p align="center">
-  <img src="../readme/select-environment.png">
-</p>
-- Trocar nas rotas criadas a URL `[http://localhost:3333](http://localhost:3333)` por `base_url`;
-<p align="center">
-  <img src="../readme/change-url.png">
-</p>
-    - Ao começar a digitar `base_url` o Insomnia irá sugerir a variável criada no `Environment`;
+## Modificando a aplicação
+
+- Inserir na rota `/projects` com método `GET` o código abaixo:
+  ```jsx
+  app.get('/projects', (request, response) => {
+    // Recupera do request.query as variáveis title e owner
+    const { title, owner } = request.query;
+
+    // Printa no terminal as variáveis recuperadas;
+    console.log(title);
+    console.log(owner);
+
+    // ...
+  });
+  ```
+- Inserir na rota `/projects/:id` com método `PUT` o código abaixo:
+  ```jsx
+  app.put('/projects/:id', (request, response) => {
+    // Recupera do request.params a variável id
+    const { id } = request.params;
+
+    // Printa no terminal a variável recuperada
+    console.log(id);
+
+    // ...
+  });
+  ```
+- Adicionar o Middleware do Express para entender o formato do Body como JSON:
+  - Inserir logo no começo do arquivo `index.js` o seguinte:
+    ```jsx
+    import express from 'express';
+
+    const app = express();
+
+    // Middleware que vai garantir o parse do request.body para JSON
+    app.use(express.json());
+
+    // ...
+    ```
+- Inserir na rota `/projects` com método `POST` o código abaixo:
+  ```jsx
+  app.post('/projects', (request, response) => {
+    // Recupera do request.body as variáveis title e owner
+    const { title, owner } = request.body;
+
+    // Printa no terminal as variáveis recuperadas;
+    console.log(title);
+    console.log(owner);
+
+    // ...
+  });
+  ```
