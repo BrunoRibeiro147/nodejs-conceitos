@@ -206,3 +206,62 @@ app.listen(3333);
     ```
     - O `:id` na rota indica que é um parâmetro que vai ser passado na chamada daquela rota;
     - Rotas com método DELETE também não podem ser testadas diretamente no navegador;
+
+# Utilizando Insomnia
+
+- Acessar, baixar e instalar o Insomnia ([https://insomnia.rest](https://insomnia.rest/));
+- Instalar o Tema Dracula para o Insomnia ([https://draculatheme.com/insomnia/](https://draculatheme.com/insomnia/));
+- Criar um novo `Workspace`;
+<p align="center">
+  <img src="../readme/create-workspace.png" width="641" height="527">
+</p>
+- Criar um `Folder` para cada tipo de recurso, inicialmente criar um para `Projects`;
+<p align="center">
+  <img src="../readme/create-folder.png" width="641" height="527">
+</p>
+- Criar uma `Request` dentro da Folder, clicando em `click to add first request...` , dar o nome de `List` e manter o método `GET`;
+<p align="center">
+  <img src="../readme/create-request.png" width="641" height="527">
+</p>
+- Inserir na barra de endereço a URL da aplicação Node e dar um `Send`;
+<p align="center">
+  <img src="../readme/send-request.png" width="641" height="527">
+</p>
+- O retorno deve ser igual ao retorno do browser;
+- Duplicar a rota criada anteriormente e mudar o método para `POST` e o nome para `Create`, feito isso dar um `Send` novamente;
+<p align="center">
+  <img src="../readme/duplicate-request.png" width="641" height="527">
+</p>
+- Duplicar novamente a rota e mudar o método para `PUT` e o nome para `Update` , ao tentar enviar vai ocorrer um erro, pois essa rota espera um `id` como parâmetro, basta inserir ao final da URL da aplicação o seguinte: `/1` e dar um `Send`;
+<p align="center">
+  <img src="../readme/put-request.png" width="641" height="527">
+</p>
+- Duplicar a rota `Update` , mudar apenas o método para `Delete` e dar um `Send` novamente;
+- Criar um novo `Environment`;
+<p align="center">
+  <img src="../readme/create-environment.png" width="641" height="527">
+</p>
+    - Os `Environments` são usados para separar as rotas para testar a aplicação local e também online;
+- Criar um `Sub Environment` com nome `dev` ;
+<p align="center">
+  <img src="../readme/create-sub-environment.png" width="641" height="527">
+</p>
+    - Pra renomear o `Sub Environment` criado basta dar 2 cliques sobre o nome;
+- Criar a variável `base_url` no `Sub Environment` criado, ficando assim:
+
+    ```json
+    {
+      "base_url": "http://localhost:3333"
+    }
+    ```
+
+- Clicar em `Done` para salvar o `Environment`;
+- Clicar no aviso `No Environment` e selecionar o `dev` criado anteriormente;
+<p align="center">
+  <img src="../readme/select-environment.png">
+</p>
+- Trocar nas rotas criadas a URL `[http://localhost:3333](http://localhost:3333)` por `base_url`;
+<p align="center">
+  <img src="../readme/change-url.png">
+</p>
+    - Ao começar a digitar `base_url` o Insomnia irá sugerir a variável criada no `Environment`;
