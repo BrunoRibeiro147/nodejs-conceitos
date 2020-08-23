@@ -154,3 +154,55 @@ app.listen(3333);
   });
   ```
 - Ao salvar o arquivo o resultado deve ser aparente no terminal, com o servidor reiniciando automaticamente;
+
+# Métodos HTTP
+
+- Métodos HTTP:
+  - GET: Buscar informações do Back-end;
+  - POST: Criar uma informação no Back-end;
+  - PUT/PATCH: Alterar uma informação no Back-end;
+  - DELETE: Deletar uma informação no Back-end;
+- Criar 4 rotas novas, uma com cada método;
+  - Modificar a rota já criada com o método GET para ficar como abaixo:
+    ```javascript
+    app.get('/projects', (request, response) => {
+      return response.json([
+        'Projeto 1',
+        'Projeto 2',
+      ]);
+    });
+    ```
+  - Criar uma nova rota com método POST com o código:
+    ```javascript
+    app.post('/projects', (request, response) => {
+      return response.json([
+        'Projeto 1',
+        'Projeto 2',
+        'Projeto 3',
+      ]);
+    });
+    ```
+    - Rotas com método POST não podem ser testadas diretamente no navegador sem ser feito uma "gambiarra";
+  - Criar uma nova rota com o método PUT com o código:
+    ```javascript
+    app.put('/projects/:id', (request, response) => {
+      return response.json([
+        'Projeto 4',
+        'Projeto 2',
+        'Projeto 3',
+      ]);
+    });
+    ```
+    - O `:id` na rota indica que é um parâmetro que vai ser passado na chamada daquela rota;
+    - Rotas com método PUT também não podem ser testadas diretamente no navegador;
+  - Criar uma nova rota com o método DELETE com o código:
+    ```javascript
+    app.delete('/projects/:id', (request, response) => {
+      return response.json([
+        'Projeto 2',
+        'Projeto 3',
+      ]);
+    });
+    ```
+    - O `:id` na rota indica que é um parâmetro que vai ser passado na chamada daquela rota;
+    - Rotas com método DELETE também não podem ser testadas diretamente no navegador;
